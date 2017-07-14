@@ -1,3 +1,6 @@
 vendor
 composer.phar
 composer.lock
+deprecation-detector.phar
+.idea/
+.rules/

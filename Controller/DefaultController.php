@@ -3,6 +3,7 @@
 namespace BCC\ResqueBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
@@ -99,13 +100,13 @@ class DefaultController extends Controller
      *
      * @return array
      */
-    private function getShowParameters()
+    private function getShowParameters(Request $request)
     {
         $showingAll = false;
         $start = -100;
         $count = -1;
 
-        if ($this->getRequest()->query->has('all')) {
+        if ($request->query->has('all')) {
             $start = 0;
             $count = -1;
             $showingAll = true;
