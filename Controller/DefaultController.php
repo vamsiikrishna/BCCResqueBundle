@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $this->getResque()->pruneDeadWorkers();
         
@@ -19,9 +19,9 @@ class DefaultController extends Controller
         );
     }
 
-    public function showQueueAction($queue)
+    public function showQueueAction(Request $request, $queue)
     {
-        list($start, $count, $showingAll) = $this->getShowParameters();
+        list($start, $count, $showingAll) = $this->getShowParameters($request);
 
         $queue = $this->getResque()->getQueue($queue);
         $jobs = $queue->getJobs($start, $count);
@@ -40,9 +40,9 @@ class DefaultController extends Controller
         );
     }
 
-    public function listFailedAction()
+    public function listFailedAction(Request $request)
     {
-        list($start, $count, $showingAll) = $this->getShowParameters();
+        list($start, $count, $showingAll) = $this->getShowParameters($request);
 
         $jobs = $this->getResque()->getFailedJobs($start, $count);
 
