@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\HttpKernel\Kernel;
 
 class StartWorkerCommand extends ContainerAwareCommand
 {
@@ -40,8 +41,13 @@ class StartWorkerCommand extends ContainerAwareCommand
                 $env['argv']
             );
         }
+        
+        if (Kernel::VERSION_ID < 20800) {
+            $env['APP_INCLUDE'] = $this->getContainer()->getParameter('kernel.root_dir').'/bootstrap.php.cache';
+        } else {
+            $env['APP_INCLUDE'] = $this->getContainer()->getParameter('kernel.root_dir').'/../var/bootstrap.php.cache';
+        }
 
-        $env['APP_INCLUDE'] = $this->getContainer()->getParameter('kernel.root_dir').'/bootstrap.php.cache';
         $env['COUNT']       = $input->getOption('count');
         $env['INTERVAL']    = $input->getOption('interval');
         $env['QUEUE']       = $input->getArgument('queues');
