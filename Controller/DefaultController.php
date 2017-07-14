@@ -7,10 +7,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function indexAction(Request $request)
     {
         $this->getResque()->pruneDeadWorkers();
-        
+
         return $this->render(
             'BCCResqueBundle:Default:index.html.twig',
             array(
@@ -19,6 +23,11 @@ class DefaultController extends Controller
         );
     }
 
+    /**
+     * @param Request $request
+     * @param $queue
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function showQueueAction(Request $request, $queue)
     {
         list($start, $count, $showingAll) = $this->getShowParameters($request);
@@ -40,6 +49,10 @@ class DefaultController extends Controller
         );
     }
 
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function listFailedAction(Request $request)
     {
         list($start, $count, $showingAll) = $this->getShowParameters($request);
@@ -59,6 +72,9 @@ class DefaultController extends Controller
         );
     }
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function listScheduledAction()
     {
         return $this->render(
@@ -69,6 +85,10 @@ class DefaultController extends Controller
         );
     }
 
+    /**
+     * @param $timestamp
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function showTimestampAction($timestamp)
     {
         $jobs = array();
@@ -97,7 +117,7 @@ class DefaultController extends Controller
 
     /**
      * decide which parts of a job queue to show
-     *
+     * @param Request $request
      * @return array
      */
     private function getShowParameters(Request $request)
