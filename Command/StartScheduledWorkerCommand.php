@@ -7,6 +7,7 @@ use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\HttpKernel\Kernel;
 
 class StartScheduledWorkerCommand extends ContainerAwareCommand
 {
@@ -32,12 +33,23 @@ class StartScheduledWorkerCommand extends ContainerAwareCommand
             unlink($pidFile);
         }
 
-        $env = array(
-            'APP_INCLUDE' => $this->getContainer()->getParameter('kernel.root_dir').'/bootstrap.php.cache',
-            'VVERBOSE'    => 1,
-            'RESQUE_PHP'  => $this->getContainer()->getParameter('bcc_resque.resque.vendor_dir').'/chrisboulton/php-resque/lib/Resque.php',
-            'INTERVAL'    => $input->getOption('interval'),
-        );
+        if (Kernel::VERSION_ID < 20800) {
+            $env = array(
+                'APP_INCLUDE' => $this->getContainer()->getParameter('kernel.root_dir').'/bootstrap.php.cache',
+                'VVERBOSE'    => 1,
+                'RESQUE_PHP'  => $this->getContainer()->getParameter('bcc_resque.resque.vendor_dir').'/chrisboulton/php-resque/lib/Resque.php',
+                'INTERVAL'    => $input->getOption('interval'),
+            );
+        } else {
+            $env = array(
+                'APP_INCLUDE' => $this->getContainer()->getParameter('kernel.root_dir').'/../var/bootstrap.php.cache',
+                'VVERBOSE'    => 1,
+                'RESQUE_PHP'  => $this->getContainer()->getParameter('bcc_resque.resque.vendor_dir').'/chrisboulton/php-resque/lib/Resque.php',
+                'INTERVAL'    => $input->getOption('interval'),
+            );
+        }
+
+
 
         $prefix = $this->getContainer()->getParameter('bcc_resque.prefix');
         if (!empty($prefix)) {
