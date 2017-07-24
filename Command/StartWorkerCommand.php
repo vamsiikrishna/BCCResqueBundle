@@ -42,7 +42,7 @@ class StartWorkerCommand extends ContainerAwareCommand
             );
         }
         
-        if (Kernel::VERSION_ID < 20800) {
+        if (Kernel::VERSION_ID < 20825) {
             $env['APP_INCLUDE'] = $this->getContainer()->getParameter('kernel.root_dir').'/bootstrap.php.cache';
         } else {
             $env['APP_INCLUDE'] = $this->getContainer()->getParameter('kernel.root_dir').'/../var/bootstrap.php.cache';

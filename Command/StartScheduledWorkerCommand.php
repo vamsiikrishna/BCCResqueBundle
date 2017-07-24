@@ -33,7 +33,7 @@ class StartScheduledWorkerCommand extends ContainerAwareCommand
             unlink($pidFile);
         }
 
-        if (Kernel::VERSION_ID < 20800) {
+        if (Kernel::VERSION_ID < 20825) {
             $env = array(
                 'APP_INCLUDE' => $this->getContainer()->getParameter('kernel.root_dir').'/bootstrap.php.cache',
                 'VVERBOSE'    => 1,
